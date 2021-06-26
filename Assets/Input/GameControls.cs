@@ -49,6 +49,14 @@ public class @GameControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""05936977-b1a0-4f73-9ac1-2f3fca02050d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -194,6 +202,17 @@ public class @GameControls : IInputActionCollection, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c8b238cf-8c01-42cd-9e18-0c88ab6e1efd"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +225,7 @@ public class @GameControls : IInputActionCollection, IDisposable
         m_Main_Movement = m_Main.FindAction("Movement", throwIfNotFound: true);
         m_Main_Jump = m_Main.FindAction("Jump", throwIfNotFound: true);
         m_Main_Interact = m_Main.FindAction("Interact", throwIfNotFound: true);
+        m_Main_Throw = m_Main.FindAction("Throw", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -259,6 +279,7 @@ public class @GameControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Main_Movement;
     private readonly InputAction m_Main_Jump;
     private readonly InputAction m_Main_Interact;
+    private readonly InputAction m_Main_Throw;
     public struct MainActions
     {
         private @GameControls m_Wrapper;
@@ -267,6 +288,7 @@ public class @GameControls : IInputActionCollection, IDisposable
         public InputAction @Movement => m_Wrapper.m_Main_Movement;
         public InputAction @Jump => m_Wrapper.m_Main_Jump;
         public InputAction @Interact => m_Wrapper.m_Main_Interact;
+        public InputAction @Throw => m_Wrapper.m_Main_Throw;
         public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -288,6 +310,9 @@ public class @GameControls : IInputActionCollection, IDisposable
                 @Interact.started -= m_Wrapper.m_MainActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnInteract;
+                @Throw.started -= m_Wrapper.m_MainActionsCallbackInterface.OnThrow;
+                @Throw.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnThrow;
+                @Throw.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnThrow;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -304,6 +329,9 @@ public class @GameControls : IInputActionCollection, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
+                @Throw.started += instance.OnThrow;
+                @Throw.performed += instance.OnThrow;
+                @Throw.canceled += instance.OnThrow;
             }
         }
     }
@@ -314,5 +342,6 @@ public class @GameControls : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
     }
 }

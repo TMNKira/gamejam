@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public interface IPickable 
+public interface IPickable
 {
-    public Rigidbody Rb { get; }
+    public Items Item { get; }
     public void BePickedUp(Transform parent);
-    public void BeDropped();
+    public void BeThrowed();
 }

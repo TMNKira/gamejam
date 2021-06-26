@@ -25,7 +25,7 @@ public class InputListener : MonoBehaviour
     }
 
     private void OnDisable()
-    {        
+    {         
         this.controls.Main.Jump.started -= ctx => Jump();
 
         this.controls.Disable();
@@ -36,14 +36,14 @@ public class InputListener : MonoBehaviour
         return this.controls.Main.Movement.ReadValue<Vector2>();
     }
 
-    public Vector2 GetMouseDelta()
-    {
-        return this.controls.Main.MouseLook.ReadValue<Vector2>();
-    }
-
     public bool IsInterractionButtonPressed()
     {
         return this.controls.Main.Interact.triggered;
+    }
+
+    public bool IsThrowButtonPressed()
+    {
+        return this.controls.Main.Throw.triggered;
     }
 
     private void Jump()
