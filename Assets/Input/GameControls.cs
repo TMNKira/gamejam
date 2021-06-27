@@ -57,6 +57,14 @@ public class @GameControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SwitchSide"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d545621-5703-42cc-9e75-77d1d32d54d6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -213,6 +221,17 @@ public class @GameControls : IInputActionCollection, IDisposable
                     ""action"": ""Throw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60629856-d18b-42ee-b874-4c9683a75f00"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchSide"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -226,6 +245,7 @@ public class @GameControls : IInputActionCollection, IDisposable
         m_Main_Jump = m_Main.FindAction("Jump", throwIfNotFound: true);
         m_Main_Interact = m_Main.FindAction("Interact", throwIfNotFound: true);
         m_Main_Throw = m_Main.FindAction("Throw", throwIfNotFound: true);
+        m_Main_SwitchSide = m_Main.FindAction("SwitchSide", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -280,6 +300,7 @@ public class @GameControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Main_Jump;
     private readonly InputAction m_Main_Interact;
     private readonly InputAction m_Main_Throw;
+    private readonly InputAction m_Main_SwitchSide;
     public struct MainActions
     {
         private @GameControls m_Wrapper;
@@ -289,6 +310,7 @@ public class @GameControls : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_Main_Jump;
         public InputAction @Interact => m_Wrapper.m_Main_Interact;
         public InputAction @Throw => m_Wrapper.m_Main_Throw;
+        public InputAction @SwitchSide => m_Wrapper.m_Main_SwitchSide;
         public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -313,6 +335,9 @@ public class @GameControls : IInputActionCollection, IDisposable
                 @Throw.started -= m_Wrapper.m_MainActionsCallbackInterface.OnThrow;
                 @Throw.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnThrow;
                 @Throw.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnThrow;
+                @SwitchSide.started -= m_Wrapper.m_MainActionsCallbackInterface.OnSwitchSide;
+                @SwitchSide.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnSwitchSide;
+                @SwitchSide.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnSwitchSide;
             }
             m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
@@ -332,6 +357,9 @@ public class @GameControls : IInputActionCollection, IDisposable
                 @Throw.started += instance.OnThrow;
                 @Throw.performed += instance.OnThrow;
                 @Throw.canceled += instance.OnThrow;
+                @SwitchSide.started += instance.OnSwitchSide;
+                @SwitchSide.performed += instance.OnSwitchSide;
+                @SwitchSide.canceled += instance.OnSwitchSide;
             }
         }
     }
@@ -343,5 +371,6 @@ public class @GameControls : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnThrow(InputAction.CallbackContext context);
+        void OnSwitchSide(InputAction.CallbackContext context);
     }
 }

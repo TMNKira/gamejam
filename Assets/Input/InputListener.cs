@@ -6,6 +6,7 @@ public class InputListener : MonoBehaviour
     public static InputListener instance;
 
     public event Action JumpInputEvent;
+    public event Action SwitchSideInputEvent;
 
     private GameControls controls;
 
@@ -22,11 +23,13 @@ public class InputListener : MonoBehaviour
         this.controls.Enable();
 
         this.controls.Main.Jump.started += ctx => Jump();
+        this.controls.Main.SwitchSide.started += ctx => SwitchSide();
     }
 
     private void OnDisable()
     {         
         this.controls.Main.Jump.started -= ctx => Jump();
+        this.controls.Main.SwitchSide.started -= ctx => SwitchSide();
 
         this.controls.Disable();
     }
@@ -49,5 +52,15 @@ public class InputListener : MonoBehaviour
     private void Jump()
     {
         JumpInputEvent?.Invoke();
+    }
+
+    private void SwitchSide()
+    {
+        SwitchSideInputEvent?.Invoke();
+    }
+
+    public bool IsSwitchSideButtonPressed()
+    {
+        return this.controls.Main.SwitchSide.triggered;
     }
 }

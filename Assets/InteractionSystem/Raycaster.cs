@@ -6,6 +6,7 @@ public class Raycaster : MonoBehaviour
     [SerializeField] private float rayLength;
     [SerializeField] private LayerMask interactableLayers;
     [SerializeField] private Camera raycastingCamera;
+    [SerializeField] private GameObject promptHolder;
     [SerializeField] private TextMeshProUGUI interactText;
     [SerializeField] private Transform itemHolder;
 
@@ -27,10 +28,8 @@ public class Raycaster : MonoBehaviour
             if (this.isIdentified == false)
             {
                 this.CheckForPickable(hit);
-                this.CheckForSimpleInteractable(hit);
-
-                if (this.itemInHand != null)
-                    this.CheckForProvidedInteractable(hit);
+                this.CheckForSimpleInteractable(hit);                
+                this.CheckForProvidedInteractable(hit);
             }
             else
             {
@@ -43,7 +42,7 @@ public class Raycaster : MonoBehaviour
         else
         {
             this.interactText.text = null;
-            this.interactText.enabled = false;
+            this.promptHolder.SetActive(false);
             this.pickableItem = null;
             this.simpleInteractable = null;
             this.providedInteractable = null;
@@ -51,7 +50,7 @@ public class Raycaster : MonoBehaviour
         }
 
         if (InputListener.instance.IsThrowButtonPressed() && this.itemInHand != null)        
-            this.ThrowItem();        
+            this.ThrowItem();
     }
 
     private void OnInteractionButtonPressed()
@@ -74,6 +73,10 @@ public class Raycaster : MonoBehaviour
                 this.providedInteractable = null;
                 this.itemInHand = null;
             }
+            else
+            {
+                this.interactText.text = "Requiers different component";
+            }
         }
     }
 
@@ -82,7 +85,7 @@ public class Raycaster : MonoBehaviour
         if (hit.collider.TryGetComponent(out IPickable pickable))
         {
             this.interactText.text = "Press left mouse button to pick it up";
-            this.interactText.enabled = true;
+            this.promptHolder.SetActive(true);
 
             this.pickableItem = pickable;
 
@@ -94,8 +97,12 @@ public class Raycaster : MonoBehaviour
     {
         if (hit.collider.TryGetComponent(out IProvidedInteractable providedInteractable))
         {
-            this.interactText.text = $"Press left mouse button to use {this.itemInHand.Item}";
-            this.interactText.enabled = true;
+            if (this.itemInHand != null)
+                this.interactText.text = $"Press left mouse button to use {this.itemInHand.Item}";
+            else
+                this.interactText.text = "Requires component to work";
+
+            this.promptHolder.SetActive(true);
 
             this.providedInteractable = providedInteractable;
 
@@ -108,8 +115,8 @@ public class Raycaster : MonoBehaviour
         if (hit.collider.TryGetComponent(out ISimpleInteractable simpleInteractable))
         {
             this.interactText.text = $"Press left mouse button to interact";
-            this.interactText.enabled = true;
-
+            this.promptHolder.SetActive(true);
+            
             this.simpleInteractable = simpleInteractable;
 
             this.isIdentified = true;           
