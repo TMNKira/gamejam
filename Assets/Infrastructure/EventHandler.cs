@@ -34,4 +34,20 @@ public class EventHandler : Singleton<EventHandler>
 
 
     #endregion
+
+    #region ProvidedInterats
+    public event Action FirstStonePlacedEvent;
+    public void InvokeFirstStonePlaced()
+    {
+        FirstStonePlacedEvent?.Invoke();
+    }
+    // -------------------------------------------------- //
+    public event Action SecondStonePlacedEvent;
+    public void InvokeSecondStonePlaced()
+    {
+        SecondStonePlacedEvent?.Invoke();
+    }
+
+
+    #endregion
 }

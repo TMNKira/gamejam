@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Character Stats")]
     [SerializeField] private float speed;
     [SerializeField] private float gravity;
     [SerializeField] private float jumpHeight;
+    [SerializeField] private float onSideSwitchModifier;
+
+    [Header("Other")]
     [SerializeField] private float smoothTime;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private bool cursorLocked = true;
@@ -34,16 +38,32 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         this.eventHandler.JumpInputEvent += this.OnJumpInput;
+        this.eventHandler.SideSwitchedEvent += this.OnSwitchSide;
     }
 
     private void OnDisable()
     {
         this.eventHandler.JumpInputEvent -= this.OnJumpInput;
+        this.eventHandler.SideSwitchedEvent -= this.OnSwitchSide;
     }
 
     private void Update()
     {
         this.PlayerMove();
+    }
+
+    private void OnSwitchSide(Sides side)
+    {
+        if (side == Sides.Cold)
+        {
+            this.speed *= this.onSideSwitchModifier;
+            this.jumpHeight *= this.onSideSwitchModifier;
+        }
+        else if (side == Sides.Warm)
+        {
+            this.speed /= this.onSideSwitchModifier;
+            this.jumpHeight /= this.onSideSwitchModifier;
+        }
     }
 
     private void PlayerMove()

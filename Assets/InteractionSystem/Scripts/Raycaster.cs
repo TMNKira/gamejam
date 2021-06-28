@@ -57,9 +57,12 @@ public class Raycaster : MonoBehaviour
     {
         if (this.pickableItem != null)
         {
-            this.pickableItem.BePickedUp(this.itemHolder);
-            this.itemInHand = this.pickableItem;
-            this.pickableItem = null;
+            if (this.itemInHand == null)
+            {
+                this.pickableItem.BePickedUp(this.itemHolder);
+                this.itemInHand = this.pickableItem;
+                this.pickableItem = null;
+            }
         }
         else if (this.simpleInteractable != null)
         {
